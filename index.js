@@ -1,5 +1,5 @@
 var _ = require("underscore"),
-    child_process = require("child_process");
+  child_process = require("child_process");
 
 function init(path) {
   var obj = new R(path);
@@ -11,7 +11,7 @@ function R(path) {
   this.d = {};
   this.path = path;
   this.options = {
-    env: _.extend({DIRNAME: __dirname}, process.env),
+    env: _.extend({ DIRNAME: __dirname }, process.env),
     encoding: "utf8"
   };
   this.idCounter = 0;
@@ -33,10 +33,7 @@ R.prototype.call = function(_opts, _callback) {
   var body = "";
   child.stderr.on("data", callback);
   child.stdout.on("data", function(d) {
-     body += d;
-  });
-  child.on("close", function(code) {
-    callback(null, JSON.parse(body));
+    callback(null, JSON.parse(d));
   });
 };
 
@@ -45,7 +42,7 @@ R.prototype.callSync = function(_opts) {
   this.options.env.input = JSON.stringify([this.d, this.path, opts]);
   var child = child_process.spawnSync("Rscript", this.args, this.options);
   if (child.stderr) throw child.stderr;
-  return(JSON.parse(child.stdout));
+  return JSON.parse(child.stdout);
 };
 
 module.exports = init;
